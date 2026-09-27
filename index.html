@@ -184,5 +184,25 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="script.js"></script>
+  <script>
+  window.wxOConfiguration = {
+    orchestrationID: "8d853b607d7c401989827ca67f154613_5341851d-a739-4940-8d7f-4e5ba7c7db61",
+    hostURL: "https://au-syd.watson-orchestrate.cloud.ibm.com",
+    rootElementID: "root",
+    deploymentPlatform: "ibmcloud",
+    crn: "crn:v1:bluemix:public:watsonx-orchestrate:au-syd:a/8d853b607d7c401989827ca67f154613:5341851d-a739-4940-8d7f-4e5ba7c7db61::",
+    chatOptions: {
+        agentId: "f70107ba-2637-4413-9974-4645b4bda7b1", 
+    }
+  };
+  setTimeout(function () {
+    const script = document.createElement('script');
+    script.src = `${window.wxOConfiguration.hostURL}/wxochat/wxoLoader.js?embed=true`;
+    script.addEventListener('load', function () {
+        wxoLoader.init();
+    });
+    document.head.appendChild(script);
+  }, 0);                     
+</script>
 </body>
 </html>
