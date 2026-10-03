@@ -209,7 +209,7 @@
           throw new Error("JWT token was not returned");
         }
 
-        wxOConfiguration.token = data.token;
+        wxOConfiguration.identityToken = data.token;
 
         const script = document.createElement("script");
 
