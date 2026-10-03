@@ -184,50 +184,61 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="script.js"></script>
-
   <script>
     const wxOConfiguration = {
-      orchestrationID: "8d853b607d7c401989827ca67f154613_5341851d-a739-4940-8d7f-4e5ba7c7db61",
-      hostURL: "https://au-syd.watson-orchestrate.cloud.ibm.com",
-      rootElementID: "root",
-      deploymentPlatform: "ibmcloud",
-      crn: "crn:v1:bluemix:public:watsonx-orchestrate:au-syd:a/8d853b607d7c401989827ca67f154613:5341851d-a739-4940-8d7f-4e5ba7c7db61::",
-      chatOptions: {
-        agentId: "f70107ba-2637-4413-9974-4645b4bda7b1"
-      }
+        orchestrationID: "8d853b607d7c401989827ca67f154613_5341851d-a739-4940-8d7f-4e5ba7c7db61",
+        hostURL: "https://au-syd.watson-orchestrate.cloud.ibm.com",
+        rootElementID: "root",
+        deploymentPlatform: "ibmcloud",
+        crn: "crn:v1:bluemix:public:watsonx-orchestrate:au-syd:a/8d853b607d7c401989827ca67f154613:5341851d-a739-4940-8d7f-4e5ba7c7db61::",
+
+        chatOptions: {
+            agentId: "f70107ba-2637-4413-9974-4645b4bda7b1"
+        }
     };
 
-    async function startCampusAI() {
-      try {
+    async function getCampusAIToken() {
         const response = await fetch(
-          "https://campusai-backend-tyrj.onrender.com/token"
+            "https://campusai-backend-tyrj.onrender.com/token"
         );
+
+        if (!response.ok) {
+            throw new Error("Token request failed: " + response.status);
+        }
 
         const data = await response.json();
 
         if (!data.token) {
-          throw new Error("JWT token was not returned");
+            throw new Error("JWT token was not returned");
         }
 
-        wxOConfiguration.identityToken = data.token;
+        return data.token;
+    }
 
-        const script = document.createElement("script");
+    async function startCampusAI() {
+        try {
+            const token = await getCampusAIToken();
 
-        script.src =
-          `${wxOConfiguration.hostURL}/wxochat/wxoLoader.js?embed=true`;
+            wxOConfiguration.identityToken = token;
 
-        script.addEventListener("load", function () {
-          wxoLoader.init(wxOConfiguration);
-        });
+            const script = document.createElement("script");
 
-        document.head.appendChild(script);
+            script.src =
+                `${wxOConfiguration.hostURL}/wxochat/wxoLoader.js?embed=true`;
 
-      } catch (error) {
-        console.error("CampusAI authentication failed:", error);
-      }
+            script.addEventListener("load", function () {
+                wxoLoader.init(wxOConfiguration);
+            });
+
+            document.head.appendChild(script);
+
+        } catch (error) {
+            console.error("CampusAI authentication failed:", error);
+        }
     }
 
     startCampusAI();
+</script>
   </script>
 
 </body>
